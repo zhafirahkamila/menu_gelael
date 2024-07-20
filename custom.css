@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap');
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #000000;
+    font-weight: 700;
+    line-height: 1.7;
+}
+
+.card {
+    border-radius: 15px;
+    height: 100%;
+    margin-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset
+}
+
+.card .card-img-top {
+    border-radius: 15px;
+    padding: 5px;
+    object-fit: cover;
+    width: 100%;
+    max-height: 130px
+}
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dropdown-item:hover {
+    background-color: #EEEDEB;
+    color: #686D76;
+}
+
+.btn-primary:hover {
+    background-color: #5AB2FF !important;
+    /* Warna hijau (contoh: menggunakan warna Bootstrap success) */
+    border-color: #2C4E80 !important;
+    /* Warna border yang sesuai */
+}
+
+.c-item {
+    justify-content: center;
+    align-items: center;
+}
+
+.c.img {
+    height: 100%;
+    width: 100%;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 60px;
+    width: 30px;
+    margin: auto;
+}
+
+.carousel-control-prev,
+.carousel-control-next:hover {
+    background-color: rgb(11, 10, 10);
+}
+
+.text-section {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.text-section p {
+    max-width: 500px;
+    margin: 16px auto 0 auto;
+}
+
+/* Menu */
+#menu .nav-pills .nav-link {
+    background-color: #fff;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 10px;
+    color: #222;
+    border-radius: 100px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+#menu {
+    padding: 30px;
+}
+
+#menu .nav-pills .nav-link.active {
+    background-color: #2C4E80;
+    color: white;
+}
+
+#menu .container {
+    margin-bottom: 40px;
+}
+
+.bg-light {
+    background-color: white;
+}
+
+/* Styling for the cart icon */
+.cart-container {
+    position: relative;
+    font-size: 22px;
+    /* Adjust the size of the icon */
+    color: #000;
+    /* Set the color of the icon */
+    cursor: pointer;
+    /* Add cursor pointer for better UX */
+}
+
+/* Styling for the badge */
+.cart-container .badge {
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    /* Set background color for the badge */
+    color: white;
+    /* Set text color for the badge */
+    border-radius: 50%;
+    /* Make the badge circular */
+    padding: 5px 7px;
+    /* Adjust padding for better appearance */
+    font-size: 12px;
+    /* Adjust font size */
+    display: flex;
+    /* Center the text inside the circle */
+    align-items: center;
+    /* Center the text inside the circle */
+    justify-content: center;
+    /* Center the text inside the circle */
+    min-width: 20px;
+    /* Ensure minimum width for single-digit numbers */
+}
+
+.footer {
+    background-image: linear-gradient(to right, rgb(44, 43, 43), grey);
+    padding: 40px 0;
+}
+
+.single-box h3,
+.single-box .card-area p {
+    color: #fff;
+    /* Change text color to white */
+}
+
+.single-box .card-area p i {
+    color: #e90c0c;
+    /* Change text color to white */
+}
+
+.single-box .card-area p i {
+    margin-right: 10px;
+    /* Add some space between icon and text */
+}
+
+.single-box .social-links a {
+    margin: 0 5px;
+    font-size: 25px;
+    color: #e90c0c;
+    /* Change icon color to white */
+    text-decoration: none;
+}
+
+.single-box .social-links a:hover {
+    color: #fff;
+    /* Change icon color on hover */
+}
+
+.copyright {
+    margin-top: 15px;
+    /* Reduce margin-top to decrease the gap */
+    margin-bottom: 0;
+    /* Ensure there is no margin at the bottom */
+    color: white;
+}
+
+.footer-divider {
+    border-top: 2px solid #ffff;
+    margin: 20px auto;
+    width: 100%;
+}
+
+.cartTab {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background-color: #d4d6d8;
+    display: grid;
+    grid-template-rows: 50px 1fr 60px;
+    z-index: 1000;
+    padding: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    transition: 0.5s;
+}
+
+.cartTab.active {
+    right: 0;
+}
+
+.cartTab h1 {
+    font-weight: 500;
+    font-size: xx-large;
+    margin: 0;
+    color: #000000;
+}
+
+.cartTab .btn {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.cartTab .btn button {
+    background-color: white;
+    font-weight: 500;
+    font-size: medium;
+    cursor: pointer;
+}
+
+.cartTab .btn .order {
+    appearance: button;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #f03434;
+    cursor: pointer;
+    font-family: Graphik, -apple-system, system-ui, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+    overflow: visible;
+    padding: 10px 50px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    transition: all 80ms ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: fit-content;
+    height: 40px;
+    margin: 0 auto;
+}
+
+.cartTab .btn .order:active,
+.cartTab .btn .order:focus {
+    outline: none;
+}
+
+.cartTab .btn .order:hover {
+    background-position: -20px -20px;
+}
+
+.cartTab .btn .order:focus:not(:active) {
+    box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
+}
+
+.cartTab .btn .close {
+    appearance: button;
+    background-color: #f03434;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: Graphik, -apple-system, system-ui, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 1;
+    overflow: visible;
+    padding: 10px 50px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    transition: all 80ms ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: fit-content;
+    height: 40px;
+    margin: 0 auto;
+}
+
+.cartTab .btn .close:active,
+.cartTab .btn .close:focus {
+    outline: none;
+}
+
+.cartTab .btn .close:hover {
+    background-position: -20px -20px;
+}
+
+.cartTab .btn .close:focus:not(:active) {
+    box-shadow: rgba(222, 122, 122, 0.25) 0 0 0 .125em;
+}
+
+.cartTab .listCard .item img {
+    width: 100%;
+}
+
+.cartTab .listCard .item {
+    display: grid;
+    grid-template-columns: 65px 70px 60px 1fr;
+    gap: 10px;
+    text-align: center;
+    align-items: center;
+    margin-top: 15px;
+
+}
+
+.listCard .quantity span {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    background-color: #eee;
+    color: #555;
+    border-radius: 50%;
+    cursor: pointer;
+    justify-content: center;
+    /* Pusatkan secara horizontal */
+    align-items: center;
+    /* Pusatkan secara vertikal */
+    font-size: 14px;
+}
+
+.listCard .quantity span:nth-child(2) {
+    background-color: transparent;
+    color: #000000;
+}
+
+.cartTab .listCard .item .name {
+    font-size: medium;
+}
+
+.input-group {
+    width: 340px;
+    justify-content: center;
+}
+
+.listCard .item:nth-child(odd) {
+    background-color: rgba(20, 5, 5, 0.067);
+}
+
+.listCard {
+    overflow: auto;
+}
+
+.listCard::-webkit-scrollbar {
+    width: 0;
+}
+
+.btn-minus {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 5px 7px;
+    font-size: 0.6rem;
+    cursor: pointer;
+}
+
+.btn-plus {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 5px 7px;
+    font-size: 0.6rem;
+    cursor: pointer;
+}
+
+.total-price-container {
+    text-align: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.total-price-container h3{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.container-payment{
+    margin-top: 200px;
+    height: auto;
+    width: 700px;
+}
+
+@media only screen and (max-width:600px){
+    .container-payment{
+        width: 100%;
+    }
+}
