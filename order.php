@@ -43,35 +43,15 @@
 </html> -->
 
 <?php
-session_start();
 
 include 'database.php'; 
-
-$qrcode = isset($_GET['qrcode']) ? $_GET['qrcode'] : '';
-
-// Ambil nilai qrcode dari URL
-$qrcode = $_GET['qrcode'];
-
-// Simpan nilai qrcode dalam session (jika diperlukan)
-$_SESSION['qrcode'] = $qrcode;
-
-if (!empty($qrcode) && is_numeric($qrcode)) {
-    $no_meja = substr($qrcode, -2);
-
-    // Simpan nomor meja ke session
-    $_SESSION['no_meja'] = $no_meja;
-    echo "Nomor Meja: " . $_SESSION['no_meja'] . "<br>";
-} else {
-    echo "QR code tidak valid atau tidak ditemukan.";
-    exit; 
-}
 
 // Retrieve data sent from AJAX request
 $postData = json_decode(file_get_contents('php://input'), true);
 
 $products = $postData['products'];
+$no_meja = $postData['no_meja'];
 $totalPrice = $postData['totalPrice'];
-$no_meja = $_SESSION['no_meja'];
 
 // Prepare and execute insert queries for each product in cart
 foreach ($products as $product) {

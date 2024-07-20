@@ -2,6 +2,15 @@ $(document).ready(function () {
     let cart_products = [];
     let totalPrice = 0;
 
+    function getParameterByName(no_meja) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(no_meja);
+    }
+
+    no_meja = getParameterByName('qrcode');
+    no_meja = no_meja ? no_meja.slice(-2) : null;
+    console.log('No meja:', no_meja);
+
     $(".cart-icon").click(function () {
         $(".cartTab").toggleClass("active");
         renderCart();
@@ -20,7 +29,7 @@ $(document).ready(function () {
         // Send AJAX request to save order
         $.ajax({
             type: 'POST',
-            url: 'order.php', 
+            url: 'order.php',
             data: JSON.stringify(orderData),
             contentType: "application/json",
             success: function (response) {
@@ -33,50 +42,50 @@ $(document).ready(function () {
             }
         });
     });
-        
+
 
     $(".back").click(function () {
-    window.location.href = "index.php";
-});
+        window.location.href = "index.php";
+    });
 
-$(".btn-add").click(function () {// Get the product details
-    var product_card = $(this).closest('.card');
-    var product_name = product_card.find('.card-title').text().trim().replace(/\n/g, '').replace(/\s\s+/g, ' ');;
-    var product_price_str = product_card.find('.card-footer h5').text().trim().replace(/\n/g, '').replace(/\s\s+/g, ' ');;
-    var product_photo = product_card.find('.card-img-top').attr('src');
-    var product_price = parseFloat(product_price_str.replace(/\./g, '').replace(',', '.'));
+    $(".btn-add").click(function () {// Get the product details
+        var product_card = $(this).closest('.card');
+        var product_name = product_card.find('.card-title').text().trim().replace(/\n/g, '').replace(/\s\s+/g, ' ');;
+        var product_price_str = product_card.find('.card-footer h5').text().trim().replace(/\n/g, '').replace(/\s\s+/g, ' ');;
+        var product_photo = product_card.find('.card-img-top').attr('src');
+        var product_price = parseFloat(product_price_str.replace(/\./g, '').replace(',', '.'));
 
-    var existing_product = cart_products.find(item => item.name === product_name);
+        var existing_product = cart_products.find(item => item.name === product_name);
 
-    if (existing_product) {
-        existing_product.quantity += 1;
-    } else {
-        var product = {
-            name: product_name,
-            price: product_price,
-            photo: product_photo,
-            quantity: 1,
-            keterangan: '',
-        };
-        cart_products.push(product);
-    }
+        if (existing_product) {
+            existing_product.quantity += 1;
+        } else {
+            var product = {
+                name: product_name,
+                price: product_price,
+                photo: product_photo,
+                quantity: 1,
+                keterangan: '',
+            };
+            cart_products.push(product);
+        }
 
-    // Render cart
-    renderCart();
-});
+        // Render cart
+        renderCart();
+    });
 
-// Function to render cart
-function renderCart() {
-    $('.listCard').empty();
+    // Function to render cart
+    function renderCart() {
+        $('.listCard').empty();
 
-    totalPrice = 0;
-    cart_products = cart_products.filter(item => item.quantity > 0);
+        totalPrice = 0;
+        cart_products = cart_products.filter(item => item.quantity > 0);
 
-    // Append each product to listCard
-    cart_products.forEach(function (item, index) {
-        totalPrice += item.price * item.quantity;
+        // Append each product to listCard
+        cart_products.forEach(function (item, index) {
+            totalPrice += item.price * item.quantity;
 
-        var product_html = `
+            var product_html = `
                 <div class="item" data-index="${index}">
                     <div class="image">
                         <img src="${item.photo}" alt="">
@@ -97,42 +106,42 @@ function renderCart() {
                     </div>
                 </div>
             `;
-        $('.listCard').append(product_html);
-    });
+            $('.listCard').append(product_html);
+        });
 
-    $('.total-price').text(formatIndonesianPrice(totalPrice.toFixed(0)));
+        $('.total-price').text(formatIndonesianPrice(totalPrice.toFixed(0)));
 
-    if (cart_products.length === 0) {
-        $('.total-price-container').hide();
-    } else {
-        $('.total-price-container').show();
-    }
-
-    $(".badge").text(cart_products.length);
-
-    $('.listCard .btn-minus').click(function () {
-        var itemIndex = $(this).closest('.item').data('index');
-        if (cart_products[itemIndex].quantity > 0) {
-            cart_products[itemIndex].quantity -= 1;
-            if (cart_products[itemIndex].quantity === 0) {
-                cart_products.splice(itemIndex, 1);
-            }
-            renderCart();
+        if (cart_products.length === 0) {
+            $('.total-price-container').hide();
+        } else {
+            $('.total-price-container').show();
         }
-    });
 
-    $('.listCard .btn-plus').click(function () {
-        var itemIndex = $(this).closest('.item').data('index');
-        cart_products[itemIndex].quantity += 1;
-        renderCart();
-    });
+        $(".badge").text(cart_products.length);
 
-    $('.listCard .keterangan-input').on('input', function () {
-        var itemIndex = $(this).closest('.item').data('index');
-        cart_products[itemIndex].keterangan = $(this).val();
-    });
-}
-function formatIndonesianPrice(price) {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
+        $('.listCard .btn-minus').click(function () {
+            var itemIndex = $(this).closest('.item').data('index');
+            if (cart_products[itemIndex].quantity > 0) {
+                cart_products[itemIndex].quantity -= 1;
+                if (cart_products[itemIndex].quantity === 0) {
+                    cart_products.splice(itemIndex, 1);
+                }
+                renderCart();
+            }
+        });
+
+        $('.listCard .btn-plus').click(function () {
+            var itemIndex = $(this).closest('.item').data('index');
+            cart_products[itemIndex].quantity += 1;
+            renderCart();
+        });
+
+        $('.listCard .keterangan-input').on('input', function () {
+            var itemIndex = $(this).closest('.item').data('index');
+            cart_products[itemIndex].keterangan = $(this).val();
+        });
+    }
+    function formatIndonesianPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 });
