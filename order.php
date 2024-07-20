@@ -45,7 +45,7 @@
 <?php
 session_start();
 
-include 'database.php'; // Ensure database connection
+include 'database.php'; 
 
 $qrcode = isset($_GET['qrcode']) ? $_GET['qrcode'] : '';
 
@@ -55,7 +55,6 @@ $qrcode = $_GET['qrcode'];
 // Simpan nilai qrcode dalam session (jika diperlukan)
 $_SESSION['qrcode'] = $qrcode;
 
-// Validasi nilai qrcode
 if (!empty($qrcode) && is_numeric($qrcode)) {
     $no_meja = substr($qrcode, -2);
 
@@ -66,8 +65,6 @@ if (!empty($qrcode) && is_numeric($qrcode)) {
     echo "QR code tidak valid atau tidak ditemukan.";
     exit; 
 }
-
-// Assuming 'order' table structure: id (auto_increment), product_price, session, code_product, keterangan
 
 // Retrieve data sent from AJAX request
 $postData = json_decode(file_get_contents('php://input'), true);

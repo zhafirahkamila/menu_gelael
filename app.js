@@ -20,7 +20,7 @@ $(document).ready(function () {
         // Send AJAX request to save order
         $.ajax({
             type: 'POST',
-            url: 'order.php', // Create this PHP file
+            url: 'order.php', 
             data: JSON.stringify(orderData),
             contentType: "application/json",
             success: function (response) {
