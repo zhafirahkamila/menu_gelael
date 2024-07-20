@@ -71,7 +71,7 @@ $postData = json_decode(file_get_contents('php://input'), true);
 
 $products = $postData['products'];
 $totalPrice = $postData['totalPrice'];
-$no_meja = $postdata['no_meja'];
+$no_meja = $_SESSION['no_meja'];
 
 // Prepare and execute insert queries for each product in cart
 foreach ($products as $product) {
