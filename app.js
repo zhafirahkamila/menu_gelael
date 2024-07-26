@@ -62,7 +62,7 @@ $(document).ready(function () {
         } else {
             var product = {
                 name: product_name,
-                price: product_price,
+                price: isNaN(product_price) ? 0 : product_price,
                 photo: product_photo,
                 quantity: 1,
                 keterangan: '',
@@ -84,6 +84,7 @@ $(document).ready(function () {
         // Append each product to listCard
         cart_products.forEach(function (item, index) {
             totalPrice += item.price * item.quantity;
+            var displayPrice = item.price === 0 ? '' : formatIndonesianPrice(item.price);
 
             var product_html = `
                 <div class="item" data-index="${index}">
@@ -94,7 +95,7 @@ $(document).ready(function () {
                         ${item.name}
                     </div>
                     <div class="price">
-                        ${formatIndonesianPrice(item.price)}
+                        ${displayPrice}
                     </div>
                     <div class="quantity">
                     <button class="btn-minus"><i class="fa fa-minus" aria-hidden="true"></i></button>
@@ -109,11 +110,11 @@ $(document).ready(function () {
             $('.listCard').append(product_html);
         });
 
-        $('.total-price').text(formatIndonesianPrice(totalPrice.toFixed(0)));
-
-        if (cart_products.length === 0) {
+        if (totalPrice === 0) {
+            $('.total-price').text('');
             $('.total-price-container').hide();
         } else {
+            $('.total-price').text(formatIndonesianPrice(totalPrice.toFixed(0)));
             $('.total-price-container').show();
         }
 
@@ -144,4 +145,27 @@ $(document).ready(function () {
     function formatIndonesianPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
+
+    // Handle form submission using AJAX
+    $("#product-form").submit(function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: 'POST',
+            url: 'input.php',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                alert('Product added successfully!');
+                $("#product-form")[0].reset(); // Clear form after submission
+            },
+            error: function (error) {
+                console.log(error)
+                alert('Failed to add product. Please try again.');
+            }
+        });
+    });
 });

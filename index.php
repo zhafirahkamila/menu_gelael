@@ -14,9 +14,10 @@
 <body>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow">
-        <div class="container-lg">
+        <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <img src="img/LogoGelael.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                <!-- <a class="navbar-brand" href="input.php">Input</a> -->
             </a>
             <div class="cart-container">
                 <i class="fas fa-cart-shopping cart-icon" href="#"></i>
@@ -158,9 +159,11 @@
                                                 <button class="btn btn-outline-dark btn-add"
                                                     style="border-radius: 20px; width: 60px;">Add
                                                 </button>
+                                                <?php if ($row['product_price'] != 0) { ?>
                                                 <h5 class="mb-0" style="font-size: 1rem;">
                                                     <?php echo number_format($row['product_price'], 0, ',', '.') ?>
                                                 </h5>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -211,9 +214,11 @@
                                                 <button class="btn btn-outline-dark btn-add"
                                                     style="border-radius: 20px; width: 60px;">Add
                                                 </button>
+                                                <?php if ($row['product_price'] != 0) { ?>
                                                 <h5 class="mb-0" style="font-size: 1rem;">
                                                     <?php echo number_format($row['product_price'], 0, ',', '.') ?>
                                                 </h5>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -264,9 +269,11 @@
                                                 <button class="btn btn-outline-dark btn-add"
                                                     style="border-radius: 20px; width: 60px;">Add
                                                 </button>
+                                                <?php if ($row['product_price'] != 0) { ?>
                                                 <h5 class="mb-0" style="font-size: 1rem;">
                                                     <?php echo number_format($row['product_price'], 0, ',', '.') ?>
                                                 </h5>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -317,9 +324,11 @@
                                                 <button class="btn btn-outline-dark btn-add"
                                                     style="border-radius: 20px; width: 60px;">Add
                                                 </button>
+                                                <?php if ($row['product_price'] != 0) { ?>
                                                 <h5 class="mb-0" style="font-size: 1rem;">
                                                     <?php echo number_format($row['product_price'], 0, ',', '.') ?>
                                                 </h5>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -370,9 +379,11 @@
                                                 <button class="btn btn-outline-dark btn-add"
                                                     style="border-radius: 20px; width: 60px;">Add
                                                 </button>
+                                                <?php if ($row['product_price'] != 0) { ?>
                                                 <h5 class="mb-0" style="font-size: 1rem;">
                                                     <?php echo number_format($row['product_price'], 0, ',', '.') ?>
                                                 </h5>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
