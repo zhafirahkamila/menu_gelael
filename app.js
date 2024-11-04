@@ -1,15 +1,19 @@
 $(document).ready(function () {
     let cart_products = [];
     let totalPrice = 0;
+    let isSubmitting = 0;
 
-    function getParameterByName(no_meja) {
+    function getParameterByName(name) {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(no_meja);
+        return urlParams.get(name);
     }
 
-    no_meja = getParameterByName('qrcode');
-    no_meja = no_meja ? no_meja.slice(-2) : null;
+    let qrcode = getParameterByName('qrcode');
+    let no_meja = qrcode ? qrcode.slice(-2) : null;
+    let kodecabang = qrcode ? qrcode.slice(0, 4) : null;
+
     console.log('No meja:', no_meja);
+    console.log('Kode Cabang:', kodecabang);
 
     $(".cart-icon").click(function () {
         $(".cartTab").toggleClass("active");
@@ -21,10 +25,20 @@ $(document).ready(function () {
     });
 
     $(".order").click(function () {
+        // Disable the button to prevent double-click
+        if (isSubmitting) {
+            return;
+        }
+        isSubmitting = true;
+
         let orderData = {
             products: cart_products,
             no_meja: no_meja,
+            kodecabang: kodecabang,
+            totalPrice: totalPrice,
         };
+
+        sessionStorage.setItem('orderData', JSON.stringify(orderData));
 
         // Send AJAX request to save order
         $.ajax({
@@ -33,27 +47,64 @@ $(document).ready(function () {
             data: JSON.stringify(orderData),
             contentType: "application/json",
             success: function (response) {
+                isSubmitting = false;
                 alert('Order placed successfully!');
                 cart_products = []; // Clear cart after order
                 renderCart(); // Re-render cart to reflect changes
+
+                window.location.href = "payment.php?qrcode=" + qrcode;
             },
             error: function (error) {
                 alert('Failed to place order. Please try again.');
+                // Re-enable the button if an error occurs
+                isSubmitting = false;
             }
         });
     });
 
 
     $(".back").click(function () {
-        window.location.href = "index.php";
+        if (qrcode) {
+            window.location.href = "index.php?qrcode=" + qrcode;
+        } else {
+            alert('QR code not found. Redirecting to home page.');
+            window.location.href = "index.php";
+        }
     });
 
     $(".btn-add").click(function () {// Get the product details
-        var product_card = $(this).closest('.card');
-        var product_name = product_card.find('.card-title').text().trim().replace(/\n/g, '').replace(/\s\s+/g, ' ');;
-        var product_price_str = product_card.find('.card-footer h5').text().trim().replace(/\n/g, '').replace(/\s\s+/g, ' ');;
-        var product_photo = product_card.find('.card-img-top').attr('src');
-        var product_price = parseFloat(product_price_str.replace(/\./g, '').replace(',', '.'));
+        console.log("GATAU");
+        var button = $(this);
+        if (button.hasClass('disabled')) {
+            alert("Product tidak tersedia");
+            return;
+        }
+
+        // Tentukan konteks klik (card atau modal)
+        var isModal = $(this).closest('.modal').length > 0;
+
+        var product_name, product_price_str, product_photo, product_price;
+
+        if (isModal) {
+            // Ambil data dari modal
+            var modal = $(this).closest('.modal');
+            product_name = modal.find('.modal-title').text().trim();
+            product_price_str = modal.find('.d-flex h5').text().trim();
+            product_photo = modal.find('.card-img-top').attr('src');
+        } else {
+            // Ambil data dari card
+            var product_card = $(this).closest('.card');
+            product_name = product_card.find('.card-title').text().trim();
+            product_price_str = product_card.find('.card-footer h5').text().trim();
+            product_photo = product_card.find('.card-img-top').attr('src');
+        }
+
+        // Konversi harga menjadi angka
+        product_price = parseFloat(product_price_str.replace(/\./g, '').replace(',', '.'));
+
+        console.log("Product Name:", product_name);
+        console.log("Product Price:", product_price);
+        console.log("Product Photo:", product_photo);
 
         var existing_product = cart_products.find(item => item.name === product_name);
 
@@ -118,7 +169,7 @@ $(document).ready(function () {
             $('.total-price-container').show();
         }
 
-        $(".badge").text(cart_products.length);
+        $(".badge-cart").text(cart_products.length);
 
         $('.listCard .btn-minus').click(function () {
             var itemIndex = $(this).closest('.item').data('index');
@@ -161,11 +212,13 @@ $(document).ready(function () {
             success: function (response) {
                 alert('Product added successfully!');
                 $("#product-form")[0].reset(); // Clear form after submission
+                window.location.href = "http://localhost/menu_gelael/dashboard.php?page=input";
             },
             error: function (error) {
-                console.log(error)
+                console.log("AJAX Error:", error)
                 alert('Failed to add product. Please try again.');
-            }
+            },
         });
     });
 });
+

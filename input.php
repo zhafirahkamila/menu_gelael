@@ -10,6 +10,8 @@ error_reporting(E_ALL);
 if (isset($_POST['submit'])) {
     $product_name = $_POST['product_name'];
     $product_code = $_POST['product_code'];
+    $kodecabang = $_POST['kodecabang'];
+    $counter = $_POST['counter'];
 
     $product_price = $_POST['product_price'];
     $product_price = str_replace('.', '', $product_price); // Menghapus titik
@@ -22,30 +24,26 @@ if (isset($_POST['submit'])) {
     $product_image = $_FILES['product_image']['name'];
     $product_image_tmp_name = $_FILES['product_image']['tmp_name'];
     $product_image_error = $_FILES['product_image']['error'];
-    $product_image_folder = $_SERVER['DOCUMENT_ROOT'].'/menu_gelael/img/'.$product_image;
+    $product_image_folder = $_SERVER['DOCUMENT_ROOT'] . '/menu_gelael/img/' . $product_image;
 
     // Create the path to be stored in the database
-    $product_image_db_path = 'img/'.$product_image;
+    $product_image_db_path = 'img/' . $product_image;
 
-    // Debug output
-    echo $_SERVER['DOCUMENT_ROOT'];
-    echo $product_image_folder;
-
-    if (!empty($product_name) && !empty($product_code) && !empty($product_price) && !empty($product_description) && !empty($product_category) && !empty($product_image)) {
-        $stmt = $conn->prepare("INSERT INTO product (prdcd, product_name, product_price, description, product_photo, category) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssdsss", $product_code, $product_name, $product_price, $product_description, $product_image_db_path, $product_category);
+    if (!empty($product_name) && !empty($product_code) && !empty($kodecabang) && isset($product_price) && !empty($product_description) && !empty($product_category) && !empty($product_image) && !empty($counter)) {
+        $stmt = $conn->prepare("INSERT INTO product (prdcd, product_name, product_price, description, product_photo, category, kodecabang, counter) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdsssss", $product_code, $product_name, $product_price, $product_description, $product_image_db_path, $product_category, $kodecabang, $counter);
 
         // Execute the statement and check for success
         if ($stmt->execute()) {
-            
+
             // Move the uploaded file to the target folder
             if (move_uploaded_file($product_image_tmp_name, $product_image_folder)) {
-                echo "New product added successfully";
-                echo "<br>File uploaded to: " . $product_image_folder;
-                header("Location: http://localhost/menu_gelael/index.php");
+                echo "<script>alert('Product added successfully!');</script>";
+                // header("Location: http://localhost/menu_gelael/dashboard.php?page=input");
+                // exit();
             } else {
-                echo "Failed to upload the image";
-                exit();
+                echo "<script>alert('Failed to upload the image');</script>";
+                // exit();
             }
         } else {
             echo "Couldn't add the product: {$stmt->error}";
@@ -74,14 +72,14 @@ $conn->close();
 </head>
 
 <body>
-    <div class="container-fluid container-payment">
+    <div class="container-fluid container-payment" style="margin-top: 35px;">
         <div class="card">
             <div class="card-header" style="font-weight: 600; text-align: center;">
                 Add a New Product
             </div>
             <div class="card-body">
                 <ul class="list-group">
-                    <form id="product-form" method="POST" enctype="multipart/form-data" action="input.php">
+                    <form id="product-form" method="POST" enctype="multipart/form-data">
                         <div class="d-flex mb-2">
                             <input class="form-control me-2" name="product_name" type="text" placeholder="Name Product"
                                 id="product-name" required="">
@@ -89,6 +87,14 @@ $conn->close();
                         <div class="d-flex mb-2">
                             <input class="form-control me-2" name="product_code" type="number"
                                 placeholder="Code Product" id="product-code" required="">
+                        </div>
+                        <div class="d-flex mb-2">
+                            <input class="form-control me-2" name="kodecabang" type="number" placeholder="Code Cabang"
+                                id="kodecabang" required="">
+                        </div>
+                        <div class="d-flex mb-2">
+                            <input class="form-control me-2" name="counter" type="number" placeholder="Counter"
+                                id="counter" required="">
                         </div>
                         <div class="d-flex mb-2">
                             <input class="form-control me-2" name="product_price" type="number" placeholder="Price"
@@ -101,10 +107,12 @@ $conn->close();
                         <div class="d-flex mb-2">
                             <select class="form-control me-2" name="product_category" id="product-category" required="">
                                 <option value="" disabled selected>Choose Category</option>
-                                <option value="main course">Main Course</option>
-                                <option value="appetizer">Appetizer</option>
-                                <option value="beverages">Beverages</option>
-                                <option value="dessert">Dessert</option>
+                                <option value="Small Bites">Small Bites</option>
+                                <option value="Main Course">Main Course</option>
+                                <option value="Favorite Drinks">Favorite Drinks</option>
+                                <option value="Coffee">Coffee</option>
+                                <option value="Juice">Juice</option>
+                                <option value="Dessert">Dessert</option>
                             </select>
                         </div>
                         <label for="product-image" class="d-flex mb-2">Image:</label>
@@ -122,6 +130,7 @@ $conn->close();
             crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <!-- <script src="app.js"></script> -->
 </body>
 
 </html>

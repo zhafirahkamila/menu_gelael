@@ -44,14 +44,18 @@
 
 <?php
 
-include 'database.php'; 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+include 'database.php';
 
 // Retrieve data sent from AJAX request
 $postData = json_decode(file_get_contents('php://input'), true);
 
 $products = $postData['products'];
 $no_meja = $postData['no_meja'];
-$totalPrice = $postData['totalPrice'];
+$kodecabang = $postData['kodecabang'];
 
 // Prepare and execute insert queries for each product in cart
 foreach ($products as $product) {
@@ -61,7 +65,7 @@ foreach ($products as $product) {
     $keterangan = $product['keterangan'];
 
     // Find code_product based on product name
-    $stmt = $conn->prepare("SELECT prdcd FROM product WHERE product_name = ?");
+    $stmt = $conn->prepare("SELECT prdcd, counter FROM product WHERE product_name = ?");
     $stmt->bind_param("s", $productName);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -69,12 +73,19 @@ foreach ($products as $product) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $codeProduct = $row['prdcd'];
+        $counter = $row['counter'];
 
-        // Insert order details into 'order' table
-        $stmt = $conn->prepare("INSERT INTO `order` (code_product, no_meja, product_price, quantity, keterangan) VALUES (?, ?, ?, ?, ?)");
-        $session = session_id(); // Get session ID or use other unique identifier
-        $stmt->bind_param("ssdds", $codeProduct, $no_meja, $productPrice, $quantity, $keterangan);
-        $stmt->execute();
+        try {
+            // Insert order details into 'order' table
+            $stmt = $conn->prepare("INSERT INTO `order` (code_product, no_meja, product_price, quantity, keterangan, kodecabang, counter) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $session = session_id(); // Get session ID or use other unique identifier
+            $stmt->bind_param("ssddsss", $codeProduct, $no_meja, $productPrice, $quantity, $keterangan, $kodecabang, $counter);
+            $stmt->execute();
+        } catch (\Throwable $th) {
+            //throw $th;
+            echo '<script> alert("' . $th->getMessage() . 'Data Not Saved"); </script>';
+            echo "========= {$th->getMessage()}";
+        }
     }
 }
 
