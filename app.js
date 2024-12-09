@@ -154,7 +154,25 @@ $(document).ready(function () {
                         <button class="btn-plus"><i class="fa fa-plus" aria-hidden="true"></i></button>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control form-control-sm bg-light fs-6 keterangan-input" placeholder="Keterangan" id="inputKeterangan" value="${item.keterangan}">
+                    <input type="text" class="form-control form-control-sm bg-light fs-6 keterangan-input" placeholder="Keterangan" id="inputKeterangan" value="${item.keterangan}">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"></button>
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 350px;">
+                            <li>
+        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
+            <img src="img/Donut.jpg" alt="Pedas" class="me-2" style="width: 70px; height: 70px; object-fit: cover;"> Pedas
+        </a>
+    </li>
+    <li>
+        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
+            <img src="img/Donut.jpg" alt="Tidak Pedas" class="me-2" style="width: 70px; height: 70px; object-fit: cover;"> Tidak Pedas
+        </a>
+    </li>
+    <li>
+        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
+            <img src="img/Donut.jpg" alt="Tambah Saus" class="me-2" style="width: 70px; height: 70px; object-fit: cover;"> Tambah Saus
+        </a>
+    </li>
+                         </ul>
                     </div>
                 </div>
             `;
@@ -192,6 +210,12 @@ $(document).ready(function () {
             var itemIndex = $(this).closest('.item').data('index');
             cart_products[itemIndex].keterangan = $(this).val();
         });
+
+        $('.listCard').on('click', '.dropdown-item', function () {
+            var selectedText = $(this).text();
+            $(this).closest('.input-group').find('.keterangan-input').val(selectedText);
+        });
+
     }
     function formatIndonesianPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

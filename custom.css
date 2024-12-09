@@ -432,6 +432,11 @@
     justify-content: center;
 }
 
+.input-group .dropdown-toggle {
+    height: 42px; /* Sesuaikan dengan tinggi yang diinginkan */
+    font-size: 0.875rem;
+}
+
 .listCard .item:nth-child(odd) {
     background-color: rgba(20, 5, 5, 0.067);
 }

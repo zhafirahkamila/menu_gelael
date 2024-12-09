@@ -53,7 +53,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                             class="form-control product-code">
                         <label for="kodeCabang">Code Cabang</label>
                         <select class="form-control kode-cabang" name="kodecabang" id="kodeCabang">
-                            <option value="" disabled selected>Choose Category</option>
+                            <option value="" disabled selected>Choose Cabang</option>
                             <?php
                             // Fetch categories from the database
                             $cabangSql = "SELECT * FROM cabang WHERE kodecabang='$current_user_kodecabang'";
