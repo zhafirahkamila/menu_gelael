@@ -517,6 +517,9 @@ $run_query_select = mysqli_query($conn, $query_select);
                 var id = toggleSwitch.closest('tr').find('.editBtn').data('id');
                 var newStatus = toggleSwitch.is(':checked') ? 1 : 0;
 
+                console.log("ID:", id);
+                console.log("New Status:", newStatus);
+
                 // Send AJAX request to update status
                 $.ajax({
                     url: 'toggle.php', // PHP file to handle the update

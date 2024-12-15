@@ -158,7 +158,7 @@
                                         ?>
                                         <div class="col mt-3">
                                             <div class="card" onclick="openModalAll(<?php echo $productId; ?>)"
-                                                data-product-id="<?php echo $productId; ?>">
+                                                data-product-id="<?php echo $productId; ?>" data-prdcd="<?php echo $productRow['prdcd']; ?>">
                                                 <div class="position-relative">
                                                     <img src="<?php echo $productRow['product_photo']; ?>" class="card-img-top"
                                                         alt="...">
@@ -209,10 +209,10 @@
                                                                 <?php echo number_format($productRow['product_price'], 0, ',', '.') ?>
                                                             </h5>
                                                             <?php if ($toggleStat == 0) { ?>
-                                                                <button class="btn btn-outline-dark btn-md btn-add disabled"
+                                                                <button class="btn btn-outline-dark btn-md btn-add disabled" data-prdcd="<?php echo $productRow['prdcd']; ?>"
                                                                     style="margin-left: 0;">Add</button>
                                                             <?php } else { ?>
-                                                                <button class="btn btn-outline-dark btn-md btn-add"
+                                                                <button class="btn btn-outline-dark btn-md btn-add" data-prdcd="<?php echo $productRow['prdcd']; ?>"
                                                                     style="margin-left: 0;">Add</button>
                                                             <?php } ?>
                                                         </div>

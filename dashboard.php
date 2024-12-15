@@ -45,6 +45,12 @@ if (!isset($_SESSION['id'])) {
                     </a>
                 </li>
                 <li class="sidebar-item">
+                    <a href="dashboard.php?page=sub_product_admin" class="sidebar-link" style="text-decoration: none;">
+                        <i class="fa-solid fa fa-list-alt"></i>
+                        <span>Sub Product</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
                     <a href="dashboard.php?page=category" class="sidebar-link" style="text-decoration: none;">
                         <i class="fa-solid fa-list"></i>
                         <span>Category</span>
@@ -72,7 +78,7 @@ if (!isset($_SESSION['id'])) {
                 <?php
                 if (isset($_GET['page'])) {
                     $page = $_GET['page'];
-                    $allowed_pages = ['admin-page', 'productList', 'category', 'kode-cabang'];
+                    $allowed_pages = ['admin-page', 'productList', 'category', 'kode-cabang', 'sub_product_admin'];
                     if (in_array($page, $allowed_pages)) {
                         include $page . '.php';
                     } else {

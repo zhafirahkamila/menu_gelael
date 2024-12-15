@@ -844,3 +844,28 @@ input:checked+.slider:before {
     margin-bottom: 10px;
     margin-right: 10px;
 }
+
+/* Tombol dropdown dengan class khusus */
+.atribut-btn {
+    display: flex;
+    align-items: center;           /* Vertikal center untuk teks dan panah */
+    justify-content: center;       /* Horizontal center */
+    padding-right: 0.75rem;        /* Memberikan ruang untuk panah */
+}
+
+/* Ikon panah */
+.atribut-btn::after {
+    content: '';                   
+    font-size: 1rem;               /* Ukuran panah */
+    border-left: 4px solid transparent;  /* Membuat sisi kiri transparan */
+    border-right: 4px solid transparent; /* Membuat sisi kanan transparan */
+    border-top: 6px solid #fff;         /* Ukuran dan warna bagian atas panah */
+    border-bottom: 0 solid transparent;  /* Tidak ada bagian bawah */
+    margin-left: 0.5em;            /* Jarak antara teks dan panah */
+    margin-right: 0.5rem;          /* Jarak ke sisi kanan tombol */
+}
+
+/* Jika dropdown dalam keadaan terbuka, tambahkan animasi */
+.show .atribut-btn::after {
+    transform: rotate(180deg);     /* Membalik panah jika dropdown terbuka */
+}

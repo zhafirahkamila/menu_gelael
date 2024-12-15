@@ -73,7 +73,6 @@ $(document).ready(function () {
     });
 
     $(".btn-add").click(function () {// Get the product details
-        console.log("GATAU");
         var button = $(this);
         if (button.hasClass('disabled')) {
             alert("Product tidak tersedia");
@@ -83,7 +82,7 @@ $(document).ready(function () {
         // Tentukan konteks klik (card atau modal)
         var isModal = $(this).closest('.modal').length > 0;
 
-        var product_name, product_price_str, product_photo, product_price;
+        var product_name, product_price_str, product_photo, product_price, prdcd;
 
         if (isModal) {
             // Ambil data dari modal
@@ -91,12 +90,14 @@ $(document).ready(function () {
             product_name = modal.find('.modal-title').text().trim();
             product_price_str = modal.find('.d-flex h5').text().trim();
             product_photo = modal.find('.card-img-top').attr('src');
+            prdcd = modal.data('prdcd');
         } else {
             // Ambil data dari card
             var product_card = $(this).closest('.card');
             product_name = product_card.find('.card-title').text().trim();
             product_price_str = product_card.find('.card-footer h5').text().trim();
             product_photo = product_card.find('.card-img-top').attr('src');
+            prdcd = product_card.data('prdcd');
         }
 
         // Konversi harga menjadi angka
@@ -105,6 +106,7 @@ $(document).ready(function () {
         console.log("Product Name:", product_name);
         console.log("Product Price:", product_price);
         console.log("Product Photo:", product_photo);
+        console.log("Prdcd:", prdcd);
 
         var existing_product = cart_products.find(item => item.name === product_name);
 
@@ -116,6 +118,7 @@ $(document).ready(function () {
                 price: isNaN(product_price) ? 0 : product_price,
                 photo: product_photo,
                 quantity: 1,
+                prdcd: prdcd,
                 keterangan: '',
             };
             cart_products.push(product);
@@ -137,8 +140,10 @@ $(document).ready(function () {
             totalPrice += item.price * item.quantity;
             var displayPrice = item.price === 0 ? '' : formatIndonesianPrice(item.price);
 
+            console.log(item); // Cek semua data produk, termasuk prdcd
+
             var product_html = `
-                <div class="item" data-index="${index}">
+                <div class="item" data-index="${index}" data-prdcd="${item.prdcd}">
                     <div class="image">
                         <img src="${item.photo}" alt="">
                     </div>
@@ -155,28 +160,55 @@ $(document).ready(function () {
                     </div>
                     <div class="input-group mb-3">
                     <input type="text" class="form-control form-control-sm bg-light fs-6 keterangan-input" placeholder="Keterangan" id="inputKeterangan" value="${item.keterangan}">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"></button>
-                        <ul class="dropdown-menu dropdown-menu-end" style="width: 350px;">
-                            <li>
-        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
-            <img src="img/Donut.jpg" alt="Pedas" class="me-2" style="width: 70px; height: 70px; object-fit: cover;"> Pedas
-        </a>
-    </li>
-    <li>
-        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
-            <img src="img/Donut.jpg" alt="Tidak Pedas" class="me-2" style="width: 70px; height: 70px; object-fit: cover;"> Tidak Pedas
-        </a>
-    </li>
-    <li>
-        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
-            <img src="img/Donut.jpg" alt="Tambah Saus" class="me-2" style="width: 70px; height: 70px; object-fit: cover;"> Tambah Saus
-        </a>
-    </li>
+                    <button class="btn btn-secondary dropdown-toggle atribut-btn" type="button" data-bs-toggle="dropdown"></button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-${item.prdcd}" style="width: 350px;">
+                            <li><span class="dropdown-item">Data Tidak Ada...</span></li>
                          </ul>
                     </div>
                 </div>
             `;
             $('.listCard').append(product_html);
+
+            $.ajax({
+                url: 'get_sub_product.php',
+                type: 'GET',
+                data: { prdcd: item.prdcd }, // Kirim prdcd ke server
+                success: function (response) {
+                    console.log(`Response from server for prdcd ${item.prdcd}: ${response}`);
+
+                    try {
+                        let subProducts = JSON.parse(response);
+                        console.log('Sub Products:', subProducts);
+
+                        // Proses setiap item untuk menggantikan \/ menjadi /
+                        let dropdownContent = subProducts.map(sub => {
+                            // Perbaiki path gambar
+                            let imagePath = sub.sub_product_image.replace(/\\\//g, '/');  // Memperbaiki path
+                            imagePath = 'http://localhost/menu_gelael/' + imagePath
+
+                            return `
+                    <li>
+                        <a class="dropdown-item" href="#" style="padding: 5px 10px;">
+                            <img src="${imagePath}" alt="${sub.sub_product_text}" class="me-2" style="width: 70px; height: 70px; object-fit: cover;">
+                            ${sub.sub_product_text}
+                        </a>
+                    </li>
+                `;
+                        }).join('');
+
+                        // Update dropdown dengan konten produk sub
+                        $(`.dropdown-${item.prdcd}`).html(dropdownContent); // Ubah isi dropdown dengan konten baru
+                    } catch (e) {
+                        console.error('Error parsing JSON:', e);
+                        // Jika ada error, tampilkan pesan gagal
+                        $(`.dropdown-${item.prdcd}`).html('<li><span class="dropdown-item text-danger">Data Tidak ada...</span></li>');
+                    }
+                },
+                error: function () {
+                    // Menangani error jika terjadi kesalahan pada AJAX request
+                    $(`.dropdown-${item.prdcd}`).html('<li><span class="dropdown-item text-danger">Data Tidak ada...</span></li>');
+                }
+            });
         });
 
         if (totalPrice === 0) {
@@ -212,11 +244,23 @@ $(document).ready(function () {
         });
 
         $('.listCard').on('click', '.dropdown-item', function () {
-            var selectedText = $(this).text();
-            $(this).closest('.input-group').find('.keterangan-input').val(selectedText);
-        });
+            var selectedText = $(this).text().trim();
+            var $input = $(this).closest('.input-group').find('.keterangan-input');
 
+            var existingText = $input.val().trim();
+            if (existingText.includes(selectedText)) {
+                return; // Jika sudah ada, tidak perlu menambah lagi
+            }
+        
+            // Jika input sudah berisi teks, tambahkan koma sebagai pemisah
+            if (existingText) {
+                $input.val(existingText + ', ' + selectedText);
+            } else {
+                $input.val(selectedText);
+            }
+        });
     }
+    
     function formatIndonesianPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
