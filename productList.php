@@ -7,9 +7,10 @@ include 'database.php';
 $query_select = "
     SELECT p.*, c.category_name 
     FROM product p
-    JOIN categories c ON p.category = c.id
+    LEFT JOIN categories c ON p.category = c.id
     WHERE p.kodecabang = '$current_user_kodecabang'
 ";
+
 $run_query_select = mysqli_query($conn, $query_select);
 ?>
 
@@ -92,7 +93,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                             include 'database.php';
 
                             // Fetch categories from the database
-                            $categorySql = "SELECT * FROM categories";
+                            $categorySql = "SELECT * FROM categories WHERE kodecabang='$current_user_kodecabang'";
                             $categoryResult = $conn->query($categorySql);
 
                             // Check if there are any categories
@@ -121,7 +122,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="save" class="btn btn-primary">Save</button>
+                        <button type="submit" name="save" class="btn btn-primary">Add</button>
                     </div>
                 </form>
                 <?php
@@ -142,7 +143,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     $product_photo = $_FILES['product_photo']['name'];
                     $product_photo_tmp_name = $_FILES['product_photo']['tmp_name'];
                     $product_photo_error = $_FILES['product_photo']['error'];
-                    $product_photo_folder = $_SERVER['DOCUMENT_ROOT'] . '/menu_gelael/img/' . $product_photo;
+                    $product_photo_folder = $_SERVER['DOCUMENT_ROOT'] . '/img/' . $product_photo;
 
                     $product_photo_db_path = 'img/' . $product_photo;
 
@@ -158,7 +159,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                             move_uploaded_file($product_photo_tmp_name, $product_photo_folder);
                             echo '<script>
                                 alert("Data Saved");
-                                window.location.href = "http://localhost/menu_gelael/dashboard.php?page=productList";
+                                window.location.href = "https://cafe.gelaelsignature.com/dashboard.php?page=productList";
                             </script>';
                         } else {
                             echo '<script> alert("Data Not Saved"); </script>';
@@ -189,14 +190,14 @@ $run_query_select = mysqli_query($conn, $query_select);
                     <div class="modal-body">
                         <label for="productName">Product Name</label>
                         <input type="text" name="product_name" placeholder="Product Name" id="productName"
-                            class="form-control product-name" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control product-name" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <label for="productCode">Product Code</label>
                         <input type="number" name="product_code" placeholder="Product Code" id="productCode"
-                            class="form-control product-code" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control product-code" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <label for="kodeCabang">Code Cabang</label>
-                        <select class="form-control kode-cabang" name="kodecabang" id="kodeCabang" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>> 
+                        <select class="form-control kode-cabang" name="kodecabang" id="kodeCabang" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>> 
                             <option value="" disabled selected>Choose Cabang</option>
                             <?php
                             // Fetch categories from the database
@@ -219,26 +220,26 @@ $run_query_select = mysqli_query($conn, $query_select);
 
                         <label for="counter">Counter</label>
                         <input type="number" name="counter" placeholder="Counter" id="counter"
-                            class="form-control counter" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control counter" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <label for="productPrice">Price</label>
                         <input type="text" name="product_price" placeholder="Product Price" id="productPrice"
-                            class="form-control product-price" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control product-price" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <label for="productDescription">Description</label>
                         <input type="text" name="product_description" placeholder="Description" id="productDescription"
-                            class="form-control product-description" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control product-description" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <label for="productCategory">Category</label>
                         <select class="form-control product-category" name="product_category" id="product_category"
-                            <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
                             <option value="" disabled selected>Choose Category</option>
                             <?php
                             // Include the database connection file
                             include 'database.php';
 
                             // Fetch categories from the database
-                            $categorySql = "SELECT * FROM categories";
+                            $categorySql = "SELECT * FROM categories WHERE kodecabang='$current_user_kodecabang'";
                             $categoryResult = $conn->query($categorySql);
 
                             // Check if there are any categories
@@ -257,10 +258,10 @@ $run_query_select = mysqli_query($conn, $query_select);
                         </select>
                         <label for="productPhoto">Image</label>
                         <input type="file" name="product_photo" id="productPhoto" accept=".jpg, .jpeg, .png"
-                            class="form-control" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <img name="photoPreview" id="productPhotoPreview" src="" alt="Product Photo"
-                            class="form-control" style="width: 120px; height: 100px;" <?php echo $current_user_role === 'Admin' ? 'disabled' : ''; ?>>
+                            class="form-control" style="width: 120px; height: 100px;" <?php echo ($current_user_role !== 'Admin' && $current_user_role !== 'Superadmin') ? 'disabled' : ''; ?>>
 
                         <label for="toggleStatus">Status</label>
                         <div class="toggle-status-container">
@@ -272,7 +273,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="update" class="btn btn-primary">Add</button>
+                        <button type="submit" name="update" class="btn btn-primary">Edit</button>
                     </div>
                 </form>
 
@@ -300,7 +301,7 @@ $run_query_select = mysqli_query($conn, $query_select);
 
                     if ($product_photo_error === UPLOAD_ERR_OK && !empty($product_photo)) {
                         // File baru diunggah
-                        $product_photo_folder = $_SERVER['DOCUMENT_ROOT'] . '/menu_gelael/img/' . $product_photo;
+                        $product_photo_folder = $_SERVER['DOCUMENT_ROOT'] . '/img/' . $product_photo;
                         $product_photo_db_path = 'img/' . $product_photo;
                     } else {
                         // Tidak ada file baru diunggah, gunakan foto yang sudah ada
@@ -314,7 +315,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     } else {
                         $query = "UPDATE product SET product_name='$product_name', prdcd='$product_code', kodecabang='$kodecabang', counter='$counter', product_price='$product_price', description='$product_description', category='$product_category', product_photo='$product_photo_db_path', status='$toggleStat' WHERE id='$id'";
                     }
-                    
+
                     $query_run = mysqli_query($conn, $query);
 
                     if ($query_run) {
@@ -324,7 +325,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                         }
                         echo '<script>
                                 alert("Data Updated Successfully");
-                                window.location.href = "http://localhost/menu_gelael/dashboard.php?page=productList";
+                                window.location.href = "https://cafe.gelaelsignature.com/dashboard.php?page=productList";
                             </script>';
                     } else {
                         echo '<script> alert("Data Not Updated"); </script>';
@@ -369,7 +370,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     if ($query_run) {
                         echo '<script>
                                 alert("Data Deleted Successfully");
-                                window.location.href = "http://localhost/menu_gelael/dashboard.php?page=productList";
+                                window.location.href = "https://cafe.gelaelsignature.com/dashboard.php?page=productList";
                             </script>';
                     } else {
                         echo '<script> alert("Data Not Deleted"); </script>';
@@ -382,7 +383,7 @@ $run_query_select = mysqli_query($conn, $query_select);
     </div>
     <!-- End of Delete Modal -->
 
-    <!-- Display Data -->
+   <!-- Display Data -->
     <div class="container">
         <table id="example" class="table table-striped" style="width:100%;">
             <thead>
@@ -400,15 +401,15 @@ $run_query_select = mysqli_query($conn, $query_select);
                 </tr>
             </thead>
             <tbody id="adminTableBody">
-                <?php if (mysqli_num_rows($run_query_select) > 0) { ?>
+                <?php if (mysqli_num_rows($run_query_select) >= 0) { ?>
                     <?php while ($row = mysqli_fetch_array($run_query_select)) { ?>
                         <tr>
                             <td style="text-align: left"><?= $row['prdcd'] ?></td>
                             <td><?= $row['product_name'] ?></td>
-                            <td style="text-align: left"><?= $row['product_price'] ?></td>
+                            <td style="text-align: left"><?= number_format($row['product_price'], 0, ',', '.') ?></td>
                             <td><?= $row['description'] ?></td>
                             <td><img src="<?= $row['product_photo'] ?>" width="45" height="45"></td>
-                            <td style="text-align: left"><?= $row['category'] ?></td>
+                            <td style="text-align: left"><?= $row['category_name'] ?? 'No Category' ?></td>
                             <td style="text-align: left"><?= $row['kodecabang'] ?></td>
                             <td style="text-align: left"><?= $row['counter'] ?></td>
                             <td>
@@ -505,7 +506,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                 // Show the modal
                 $('#editProduct').modal('show');
             });
-            
+
             $(document).on('click', '.deleteBtn', function () {
                 var id = $(this).data('id');
                 $('#deleteProductId').val(id);
@@ -513,33 +514,40 @@ $run_query_select = mysqli_query($conn, $query_select);
             })
 
             $(document).on('change', 'input[name="toggleStat"]', function () {
-                var toggleSwitch = $(this);
-                var id = toggleSwitch.closest('tr').find('.editBtn').data('id');
-                var newStatus = toggleSwitch.is(':checked') ? 1 : 0;
+    console.log('Toggle status has changed');
+    let toggleSwitch = $(this);
+    
+    // Cari elemen .editBtn dan periksa data-id
+    let editBtn = toggleSwitch.closest('tr').find('.editBtn');
+    console.log("editBtn element:", editBtn); // Periksa apakah elemen ditemukan
+    console.log("Data ID:", editBtn.data('id')); // Periksa nilai data-id
+    
+    let productId = editBtn.data('id');
+    var newStatus = toggleSwitch.is(':checked') ? 1 : 0;
 
-                console.log("ID:", id);
-                console.log("New Status:", newStatus);
-
-                // Send AJAX request to update status
-                $.ajax({
-                    url: 'toggle.php', // PHP file to handle the update
-                    method: 'POST',
-                    data: {
-                        id: id,
-                        status: newStatus
-                    },
-                    success: function (response) {
-                        if (response == 'success') {
-                            alert('Status updated successfully.');
-                        } else {
-                            alert('Failed to update status.');
-                        }
-                    },
-                    error: function () {
-                        alert('Error occurred while updating status.');
-                    }
-                });
-            });
+    if (productId !== undefined) {
+        console.log("ID:", productId);
+        console.log("New Status:", newStatus);
+        // Kirim permintaan AJAX untuk memperbarui status
+        $.ajax({
+            url: 'toggle.php', // File PHP untuk menangani pembaruan
+            method: 'POST',
+            data: {
+                id: productId,
+                status: newStatus
+            },
+            success: function (response) {
+                resp = JSON.parse(response)
+                alert(resp['message']);
+            },
+            error: function () {
+                alert('Error occurred while updating status.');
+            }
+        });
+    } else {
+        console.log("Product ID is undefined.");
+    }
+});
         });
 
     </script>

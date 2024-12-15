@@ -1,7 +1,10 @@
 <?php
 include 'database.php';
-$query_select = 'SELECT * FROM categories';
+$current_user_kodecabang = $_SESSION['kodecabang'];
+
+$query_select = "SELECT * FROM categories WHERE kodecabang = '$current_user_kodecabang'";
 $run_query_select = mysqli_query($conn, $query_select);
+
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +67,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     if ($query_run) {
                         echo '<script>
                             alert("New Category Saved");
-                            window.location.href = "http://localhost/menu_gelael/dashboard.php?page=category";
+                            window.location.href = "https://cafe.gelaelsignature.com/dashboard.php?page=category";
                         </script>';
                     } else {
                         echo '<script> alert("Data Category Not Saved"); </script>';
@@ -108,13 +111,13 @@ $run_query_select = mysqli_query($conn, $query_select);
                     $kodecabang = $_POST['kodecabang'];
                     $category_name = $_POST['category_name'];
 
-                    $query = "UPDATE admin SET kodecabang='$kodecabang', category_name='$category_name' WHERE id='$id'";
+                    $query = "UPDATE categories SET kodecabang='$kodecabang', category_name='$category_name' WHERE id='$id'";
                     $query_run = mysqli_query($conn, $query);
 
                     if ($query_run) {
                         echo '<script>
                             alert("Data Update Successfully");
-                            window.location.href = "http://localhost/menu_gelael/dashboard.php?page=category";
+                            window.location.href = "https://cafe.gelaelsignature.com/dashboard.php?page=category";
                         </script>';
                     } else {
                         echo '<script> alert("Data Not Update"); </script>';
@@ -158,7 +161,7 @@ $run_query_select = mysqli_query($conn, $query_select);
                     if ($query_run) {
                         echo '<script>
                             alert("Data Deleted Successfully");
-                            window.location.href = "http://localhost/menu_gelael/dashboard.php?page=category";
+                            window.location.href = "https://cafe.gelaelsignature.com/dashboard.php?page=category";
                         </script>';
                     } else {
                         echo '<script> alert("Data Not Deleted"); </script>';
@@ -234,8 +237,8 @@ $run_query_select = mysqli_query($conn, $query_select);
                 // Get data attributes
                 var id = $(this).data('id');
                 var kodecabang = $(this).data('kodecabang');
-                var category_name = $(this).data('category_name');
-
+                var category_name = $(this).data('name');
+                
                 // Set data to modal form
                 $('#editCategoryId').val(id);
                 $('#editKode').val(kodecabang);

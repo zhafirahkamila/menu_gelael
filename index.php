@@ -103,7 +103,8 @@
                 // Include the database connection file
                 include 'database.php';
                 // Fetch categories from the database
-                $categorySql = "SELECT * FROM categories";
+                $kodecabang = isset($_GET['qrcode']) ? substr($_GET['qrcode'], 0, 4) : '';
+                $categorySql = "SELECT * FROM categories WHERE kodecabang = '$kodecabang'";
                 $categoryResult = $conn->query($categorySql);
                 while ($row = mysqli_fetch_assoc($categoryResult)) {
                     $categoryId = $row['id'];
@@ -136,7 +137,7 @@
                 $kodecabang = isset($_GET['qrcode']) ? substr($_GET['qrcode'], 0, 4) : '';
 
                 // Fetch categories from the database
-                $categorySql = "SELECT * FROM categories";
+                $categorySql = "SELECT * FROM categories WHERE kodecabang = '$kodecabang'";
                 $categoryResult = $conn->query($categorySql);
 
                 if ($categoryResult->num_rows > 0) {
@@ -147,6 +148,7 @@
                         <div class="container">
                             <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
                                 <?php
+                                $kodecabang = isset($_GET['qrcode']) ? substr($_GET['qrcode'], 0, 4) : '';
                                 // Query to fetch all products for the branch
                                 $allProductSql = "SELECT * FROM product WHERE kodecabang = '$kodecabang'";
                                 $allProductResult = $conn->query($allProductSql);
@@ -245,6 +247,7 @@
                                 <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
                                     <?php
                                     // Query to fetch products based on category and branch code
+                                    $kodecabang = isset($_GET['qrcode']) ? substr($_GET['qrcode'], 0, 4) : '';
                                     $productSql = "SELECT * FROM product WHERE category = '$categoryId' AND kodecabang = '$kodecabang'";
                                     $productResult = $conn->query($productSql);
 
