@@ -59,14 +59,14 @@ $kodecabang = $postData['kodecabang'];
 
 // Prepare and execute insert queries for each product in cart
 foreach ($products as $product) {
-    $productName = $product['name'];
+    $prdcd = $product['prdcd'];
     $productPrice = $product['price'];
     $quantity = $product['quantity'];
     $keterangan = $product['keterangan'];
 
     // Find code_product based on product name
-    $stmt = $conn->prepare("SELECT prdcd, counter FROM product WHERE product_name = ?");
-    $stmt->bind_param("s", $productName);
+    $stmt = $conn->prepare("SELECT prdcd, counter FROM product WHERE prdcd = ? AND kodecabang = ?");
+    $stmt->bind_param("ss", $prdcd, $kodecabang);
     $stmt->execute();
     $result = $stmt->get_result();
 
